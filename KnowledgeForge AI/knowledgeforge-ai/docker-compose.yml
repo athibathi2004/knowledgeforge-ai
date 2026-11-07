@@ -1,0 +1,62 @@
+services:
+  # ============================================================================
+  # PostgreSQL with pgvector extension for high-performance vector search
+  # ============================================================================
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: knowledgeforge-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: knowledgeforge
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d knowledgeforge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # KnowledgeForge AI Application Backend & Web UI
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: knowledgeforge-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgrespassword@db:5432/knowledgeforge
+      - EMBEDDING_PROVIDER=mock
+      - LLM_PROVIDER=mock
+      - ENVIRONMENT=production
+    volumes:
+      - app_uploads:/app/data/uploads
+
+  # ============================================================================
+  # Optional Local Ollama Service for Local LLMs (Mistral / Llama 3)
+  # Run with: docker compose --profile local-llm up -d
+  # ============================================================================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: knowledgeforge-ollama
+    profiles: ["local-llm"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+
+volumes:
+  pgdata:
+  app_uploads:
+  ollama_models:
+

@@ -1,0 +1,102 @@
+{
+  "name": "KnowledgeForge Enterprise Benchmark Suite v1.0",
+  "description": "Standardized evaluation questions for testing context precision, context recall, faithfulness, and hallucination resistance.",
+  "samples": [
+    {
+      "id": "eval-01",
+      "question": "What is the Recovery Time Objective (RTO) for Tier 1 mission-critical services?",
+      "ground_truth_answer": "The Recovery Time Objective (RTO) for Tier 1 services is 15 minutes.",
+      "ground_truth_facts": [
+        "Recovery Time Objective (RTO) for Tier 1 services is 15 minutes",
+        "RPO is under 1 minute for Tier 1"
+      ],
+      "relevant_sources": ["cloud_architecture_guide.md"]
+    },
+    {
+      "id": "eval-02",
+      "question": "What encryption standards are mandatory for data at rest and data in transit?",
+      "ground_truth_answer": "AES-256 is mandatory for data at rest, and TLS 1.3 is mandatory for data in transit.",
+      "ground_truth_facts": [
+        "AES-256 encryption required for all persistent storage volumes",
+        "TLS 1.3 with strict forward secrecy required for data in transit"
+      ],
+      "relevant_sources": ["cloud_architecture_guide.md", "ai_governance_policy.md"]
+    },
+    {
+      "id": "eval-03",
+      "question": "Under what circumstances is customer data permitted to be used for LLM foundation model training?",
+      "ground_truth_answer": "Customer data is strictly prohibited from being used to train or fine-tune public foundation models without explicit contractual consent.",
+      "ground_truth_facts": [
+        "Customer data is strictly prohibited from being used for LLM model training",
+        "Explicit, affirmative opt-in consent and tenant isolation are required"
+      ],
+      "relevant_sources": ["ai_governance_policy.md"]
+    },
+    {
+      "id": "eval-04",
+      "question": "Who has the authority to declare a Severity-1 outage and what is the maximum escalation bridge time?",
+      "ground_truth_answer": "The Incident Commander (IC) or on-call Lead SRE has authority to declare a Sev-1 outage, and the escalation bridge must be convened within 5 minutes.",
+      "ground_truth_facts": [
+        "Incident Commander or Lead SRE declares Severity-1",
+        "Escalation bridge convened within 5 minutes"
+      ],
+      "relevant_sources": ["incident_response_sop.md"]
+    },
+    {
+      "id": "eval-05",
+      "question": "How often must cloud KMS encryption keys be rotated?",
+      "ground_truth_answer": "Encryption keys must be rotated automatically every 90 days using a cloud Key Management Service (KMS).",
+      "ground_truth_facts": [
+        "Encryption keys rotated automatically every 90 days using KMS"
+      ],
+      "relevant_sources": ["cloud_architecture_guide.md"]
+    },
+    {
+      "id": "eval-06",
+      "question": "Within how many hours must a blameless post-mortem be published following incident closure?",
+      "ground_truth_answer": "A blameless post-mortem root-cause analysis (RCA) must be published within 72 hours of incident closure.",
+      "ground_truth_facts": [
+        "Blameless root-cause analysis must be published within 72 hours of incident closure"
+      ],
+      "relevant_sources": ["incident_response_sop.md"]
+    },
+    {
+      "id": "eval-07",
+      "question": "What vector indexing parameters are specified for pgvector to achieve sub-50ms retrieval?",
+      "ground_truth_answer": "Vector embeddings are indexed using HNSW with parameters m=16 and ef_construction=64.",
+      "ground_truth_facts": [
+        "pgvector extension with HNSW indexing",
+        "m=16 and ef_construction=64 for sub-50ms cosine similarity"
+      ],
+      "relevant_sources": ["cloud_architecture_guide.md"]
+    },
+    {
+      "id": "eval-08",
+      "question": "What neutral delimiters are mandated to isolate retrieved context and prevent prompt injection?",
+      "ground_truth_answer": "Retrieved context passages must be encapsulated within '--- RETRIEVED CONTEXT START ---' neutral delimiters.",
+      "ground_truth_facts": [
+        "RETRIEVED CONTEXT START neutral delimiters to prevent prompt injection"
+      ],
+      "relevant_sources": ["ai_governance_policy.md"]
+    },
+    {
+      "id": "eval-09",
+      "question": "What is the secret recipe for dark matter antigravity propulsion crystals?",
+      "ground_truth_answer": "Based on the provided documents, I do not have sufficient information to answer this question.",
+      "ground_truth_facts": [
+        "sufficient information"
+      ],
+      "relevant_sources": []
+    },
+    {
+      "id": "eval-10",
+      "question": "What is the capital city of Atlantis according to enterprise policy?",
+      "ground_truth_answer": "Based on the provided documents, I do not have sufficient information to answer this question.",
+      "ground_truth_facts": [
+        "sufficient information"
+      ],
+      "relevant_sources": []
+    }
+  ]
+}
+

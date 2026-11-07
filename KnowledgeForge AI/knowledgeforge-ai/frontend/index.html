@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KnowledgeForge AI - Enterprise Knowledge Intelligence Platform</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>KnowledgeForge</h1>
+          <span class="badge-tag">Enterprise RAG</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="chat-tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Chat Assistant</span>
+        </button>
+        <button class="nav-item" data-tab="docs-tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Document Hub</span>
+        </button>
+        <button class="nav-item" data-tab="retrieval-tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Retrieval Playground</span>
+        </button>
+        <button class="nav-item" data-tab="eval-tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>Evaluation Benchmark</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="status-indicator">
+          <div class="status-dot" id="system-status-dot"></div>
+          <span id="system-status-text">Checking health...</span>
+        </div>
+        <div class="component-badges">
+          <span class="comp-badge" id="badge-db" title="Database status">DB: --</span>
+          <span class="comp-badge" id="badge-emb" title="Embedding Provider">EMB: --</span>
+          <span class="comp-badge" id="badge-llm" title="LLM Gateway">LLM: --</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content View -->
+    <main class="main-content">
+      <!-- 1. CHAT TAB -->
+      <section id="chat-tab" class="tab-pane active">
+        <div class="pane-header">
+          <div>
+            <h2>Contextual Knowledge Assistant</h2>
+            <p class="subtitle">Ask questions grounded in indexed documents with verified source citations.</p>
+          </div>
+          <div class="chat-controls">
+            <label class="control-label">
+              <span>Top-K:</span>
+              <input type="number" id="chat-topk" value="5" min="1" max="15" class="input-mini">
+            </label>
+            <label class="toggle-control">
+              <input type="checkbox" id="chat-rerank" checked>
+              <span>Cross-Rerank</span>
+            </label>
+            <button id="btn-clear-chat" class="btn-secondary btn-sm">Clear Thread</button>
+          </div>
+        </div>
+
+        <div class="chat-viewport" id="chat-viewport">
+          <div class="chat-message assistant welcome-msg">
+            <div class="msg-avatar">AI</div>
+            <div class="msg-body">
+              <p>Welcome to <strong>KnowledgeForge AI</strong>. I am your enterprise knowledge intelligence engine.</p>
+              <p>Ask natural-language questions regarding indexed enterprise architecture guides, AI security policies, and incident response standard operating procedures.</p>
+              <div class="sample-queries">
+                <span class="sample-chip" onclick="setQuery('What is the Recovery Time Objective (RTO) for Tier 1 mission-critical services?')">RTO for Tier 1</span>
+                <span class="sample-chip" onclick="setQuery('What encryption standards are mandatory for data at rest and data in transit?')">Encryption Baselines</span>
+                <span class="sample-chip" onclick="setQuery('Who has the authority to declare a Severity-1 outage?')">Sev-1 Incident Authority</span>
+                <span class="sample-chip" onclick="setQuery('Is customer data allowed to train foundation models?')">Customer Data Training</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-bar">
+          <textarea id="chat-input" placeholder="Ask a question about your knowledge base... (Press Enter to submit, Shift+Enter for newline)" rows="1"></textarea>
+          <button id="btn-send-chat" class="btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <span>Ask</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. DOCUMENT HUB TAB -->
+      <section id="docs-tab" class="tab-pane">
+        <div class="pane-header">
+          <div>
+            <h2>Document Management Hub</h2>
+            <p class="subtitle">Ingest, extract, chunk, and index enterprise documents (PDF, DOCX, TXT, MD).</p>
+          </div>
+        </div>
+
+        <div class="upload-card">
+          <div class="drop-zone" id="drop-zone">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <p class="drop-title">Drag & drop document files here or <strong>browse files</strong></p>
+            <p class="drop-hint">Supports PDF, DOCX, Markdown (.md), and TXT up to 25MB</p>
+            <input type="file" id="file-input" accept=".pdf,.docx,.txt,.md" style="display:none">
+          </div>
+
+          <div class="upload-options">
+            <div class="option-field">
+              <label>Chunk Size (chars):</label>
+              <input type="number" id="upload-chunk-size" value="600" min="200" max="2000">
+            </div>
+            <div class="option-field">
+              <label>Chunk Overlap (chars):</label>
+              <input type="number" id="upload-chunk-overlap" value="120" min="20" max="500">
+            </div>
+            <div class="option-field">
+              <label>Chunking Strategy:</label>
+              <select id="upload-strategy">
+                <option value="recursive" selected>Recursive Character (Semantic)</option>
+                <option value="fixed">Fixed Size Window</option>
+                <option value="sliding_window">Sliding Window (Tokens)</option>
+              </select>
+            </div>
+          </div>
+          <div id="upload-progress-container" class="progress-bar-container" style="display:none">
+            <div class="progress-bar" id="upload-progress-bar"></div>
+            <span class="progress-text" id="upload-progress-text">Processing document...</span>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <h3>Indexed Documents (<span id="doc-count">0</span>)</h3>
+            <button id="btn-refresh-docs" class="btn-secondary btn-sm">Refresh</button>
+          </div>
+          <table class="data-table" id="docs-table">
+            <thead>
+              <tr>
+                <th>Title / Filename</th>
+                <th>Format</th>
+                <th>Size</th>
+                <th>Chunks</th>
+                <th>Status</th>
+                <th>Uploaded</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="docs-table-body">
+              <tr><td colspan="7" class="empty-cell">No documents indexed yet. Upload sample documents above.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. RETRIEVAL PLAYGROUND TAB -->
+      <section id="retrieval-tab" class="tab-pane">
+        <div class="pane-header">
+          <div>
+            <h2>Retrieval & Reranking Playground</h2>
+            <p class="subtitle">Directly inspect vector similarity, BM25 keyword matching, and cross-encoder score fusion.</p>
+          </div>
+        </div>
+
+        <div class="search-bar-card">
+          <div class="search-input-group">
+            <input type="text" id="retrieval-query-input" placeholder="Enter test query (e.g., 'disaster recovery RTO targets' or 'AES-256 encryption')...">
+            <button id="btn-test-retrieval" class="btn-primary">Search Index</button>
+          </div>
+          <div class="search-config-row">
+            <div class="config-item">
+              <label>Hybrid Weight Alpha: <span id="alpha-val">0.60</span></label>
+              <input type="range" id="retrieval-alpha" min="0" max="1" step="0.05" value="0.60">
+              <span class="range-subtext">(0.0 = Pure BM25, 1.0 = Pure Vector)</span>
+            </div>
+            <div class="config-item">
+              <label>Top Results: <input type="number" id="retrieval-topk" value="5" min="1" max="20" class="input-mini"></label>
+            </div>
+            <div class="config-item">
+              <label class="toggle-control">
+                <input type="checkbox" id="retrieval-rerank" checked>
+                <span>Enable Reranking</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="retrieval-results-container">
+          <div class="results-meta" id="retrieval-meta" style="display:none">
+            <span>Query processed in <strong id="retrieval-time">0</strong> ms. Displaying <strong id="retrieval-count">0</strong> candidates.</span>
+          </div>
+          <div class="candidate-cards" id="retrieval-cards">
+            <div class="empty-state">
+              <p>Enter a query above and click <strong>Search Index</strong> to inspect candidate rankings and scoring breakdowns.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. EVALUATION BENCHMARK TAB -->
+      <section id="eval-tab" class="tab-pane">
+        <div class="pane-header">
+          <div>
+            <h2>RAG Quality & Evaluation Benchmark</h2>
+            <p class="subtitle">Run automated evaluation suite measuring Context Precision, Recall, Faithfulness, and Latency.</p>
+          </div>
+          <button id="btn-run-eval" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Run Benchmark</span>
+          </button>
+        </div>
+
+        <!-- Metrics Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Context Precision</div>
+            <div class="metric-value" id="metric-precision">--</div>
+            <div class="metric-desc">Ratio of relevant chunks ranked at top positions</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Context Recall</div>
+            <div class="metric-value" id="metric-recall">--</div>
+            <div class="metric-desc">Coverage of ground truth statements in retrieved text</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Faithfulness</div>
+            <div class="metric-value" id="metric-faithfulness">--</div>
+            <div class="metric-desc">Anti-hallucination score (claims grounded in context)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Answer Relevance</div>
+            <div class="metric-value" id="metric-relevance">--</div>
+            <div class="metric-desc">Semantic alignment between question and generated answer</div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <h3>Sample Evaluation Breakdown</h3>
+            <span id="eval-run-id" class="badge-tag">Run: None</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Test Question</th>
+                <th>Ground Truth Answer</th>
+                <th>Generated Answer</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>Faithfulness</th>
+                <th>Latency</th>
+              </tr>
+            </thead>
+            <tbody id="eval-table-body">
+              <tr><td colspan="7" class="empty-cell">Click "Run Benchmark" above to execute evaluation against test dataset.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Document Chunks Modal -->
+  <div class="modal" id="chunk-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-doc-title">Document Chunks</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-chunks-body">
+        Loading chunks...
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

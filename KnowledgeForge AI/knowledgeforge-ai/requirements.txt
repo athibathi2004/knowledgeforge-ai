@@ -1,0 +1,34 @@
+# Core Web Framework & Server
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+python-multipart>=0.0.9
+
+# Data Validation & Settings
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+
+# Database & ORM
+sqlalchemy>=2.0.28
+psycopg2-binary>=2.9.9
+pgvector>=0.2.5
+
+# Document Parsing & Processing
+pypdf>=4.1.0
+python-docx>=1.1.0
+reportlab>=4.1.0
+pillow>=10.2.0
+
+# Numerical Computation & Lexical Retrieval
+numpy>=1.26.0
+rank-bm25>=0.2.2
+
+# HTTP & API Communication
+httpx>=0.27.0
+
+# Testing & Quality
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+
+# Optional Neural Extensions (uncomment if local HuggingFace inference is desired)
+# sentence-transformers>=2.5.0
+
